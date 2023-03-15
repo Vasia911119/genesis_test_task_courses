@@ -7,13 +7,15 @@ import {
 } from "react-router-dom";
 import "./App.css";
 
-const CoursesPage = lazy(() => import("./pages/CoursesPage"));
-const CoursePage = lazy(() => import("./pages/CoursePage"));
+import Spinner from "./components/Spinner/Spinner";
+
+const CoursesPage = lazy(() => import("./pages/CoursesPage/CoursesPage"));
+const CoursePage = lazy(() => import("./pages/CoursePage/CoursePage"));
 
 function App() {
   return (
     <Router>
-      <Suspense fallback={<div>Loading ...</div>}>
+      <Suspense fallback={<Spinner />}>
         <Routes>
           <Route path="/courses" element={<CoursesPage />}></Route>
           <Route path="/courses/:courseId" element={<CoursePage />}></Route>

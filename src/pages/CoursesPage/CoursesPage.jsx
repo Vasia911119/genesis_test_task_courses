@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { getCourses } from "../services/api";
-import Pagination from "../components/Pagination";
+import { getCourses } from "../../services/api";
+import Pagination from "../../components/Pagination/Pagination";
 
 const CoursesPage = () => {
   const { pathname } = useLocation();
