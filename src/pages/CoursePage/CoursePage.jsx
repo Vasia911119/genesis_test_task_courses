@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getCourseById } from "../../services/api";
-import ReactPlayer from "react-player";
+import Spinner from "../../components/Spinner/Spinner";
 
 const CoursesPage = () => {
   const params = useParams();
   const [course, setCourse] = useState([]);
   const [videoUrl, setVideoUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
+      setIsLoading(true);
       const courseData = await getCourseById(params.courseId);
       setCourse(courseData);
       setVideoUrl(courseData.meta.courseVideoPreview.link);
+      setIsLoading(false);
     }
     fetchData();
   }, [params.courseId]);
@@ -20,23 +23,12 @@ const CoursesPage = () => {
   console.log(videoUrl);
 
   return (
-    <>
-      <Link to="/courses">Back to courses</Link>
-      {
+    <div className="container">
+      {isLoading ? (
+        <Spinner />
+      ) : (
         <>
-          {/* // <ReactPlayer
-        //   url={videoUrl}
-        //   controls={true}
-        //   width="100%"
-        //   height="auto"
-        //   config={{
-        //     file: {
-        //       attributes: {
-        //         crossOrigin: "anonymous",
-        //       },
-        //     },
-        //   }}
-        // /> */}
+          <Link to="/courses">Back to courses</Link>
           <video width="750" heigth="500" controls={true} preload="auto">
             <source src={videoUrl} type="application/x-mpegURL" />
             Sorry, your brovser doesn't support videos.
@@ -81,8 +73,8 @@ const CoursesPage = () => {
             ))}
           </ol>
         </>
-      }
-    </>
+      )}
+    </div>
   );
 };
 
