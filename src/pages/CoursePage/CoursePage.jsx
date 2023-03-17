@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getCourseById } from "../../services/api";
 import Spinner from "../../components/Spinner/Spinner";
@@ -7,17 +7,19 @@ import { formatDate } from "../../helpers/formatDate";
 import { formatDuration } from "../../helpers/formatDuration";
 import Footer from "../../views/Footer/Footer";
 import Header from "../../views/Header/Header";
-import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
+import Hls from "hls.js";
 
 const CoursesPage = () => {
   const params = useParams();
   const [course, setCourse] = useState([]);
   const [videoUrl, setVideoUrl] = useState("");
-  const [posterImg, setPosterImg] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
-  console.log(course);
-  console.log(posterImg);
+  const [progress, setProgress] = useState({
+    courseId: null,
+    lastLessonId: null,
+    currentTime: 0,
+  });
+  const videoRef = useRef(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -25,11 +27,89 @@ const CoursesPage = () => {
       const courseData = await getCourseById(params.courseId);
       setCourse(courseData);
       setVideoUrl(courseData.meta.courseVideoPreview.link);
-      setPosterImg(courseData.previewImageLink + "/cover.webp");
       setIsLoading(false);
     }
     fetchData();
   }, [params.courseId]);
+
+  useEffect(() => {
+    const storedProgress = JSON.parse(
+      localStorage.getItem(`courseProgress-${params.courseId}`)
+    );
+    if (storedProgress) {
+      setProgress(storedProgress);
+      setVideoUrl(
+        storedProgress.lastLessonId
+          ? course?.lessons?.find(
+              (lesson) => lesson.id === storedProgress.lastLessonId
+            ).link
+          : course.meta.courseVideoPreview.link
+      );
+    }
+  }, [params.courseId, course]);
+
+  useEffect(() => {
+    if (progress.courseId && progress.lastLessonId) {
+      localStorage.setItem(
+        `courseProgress-${progress.courseId}`,
+        JSON.stringify(progress)
+      );
+    }
+  }, [progress]);
+
+  useEffect(() => {
+    if (videoUrl) {
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(videoUrl);
+        hls.attachMedia(videoRef.current);
+        // hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        //   videoRef.current.play();
+        // });
+      } else if (
+        videoRef.current.canPlayType("application/vnd.apple.mpegurl")
+      ) {
+        videoRef.current.src = videoUrl;
+        // videoRef.current.addEventListener("loadedmetadata", () => {
+        //   videoRef.current.play();
+        // });
+      }
+      if (
+        videoRef.current &&
+        progress.currentTime &&
+        !isNaN(progress.currentTime)
+      ) {
+        videoRef.current.currentTime = progress.currentTime;
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [videoUrl]);
+
+  const handleVideoTimeUpdate = () => {
+    if (videoRef.current) {
+      setProgress({
+        ...progress,
+        currentTime: Math.floor(videoRef.current.currentTime),
+      });
+    }
+  };
+
+  const handleVideoEnded = () => {
+    setProgress({
+      courseId: params.courseId,
+      lastLessonId: null,
+      currentTime: 0,
+    });
+  };
+
+  const handleVideoPause = () => {
+    if (videoRef.current) {
+      setProgress({
+        ...progress,
+        currentTime: Math.floor(videoRef.current.currentTime),
+      });
+    }
+  };
 
   return (
     <div className="container flex flex-col min-h-screen">
@@ -39,7 +119,14 @@ const CoursesPage = () => {
           <Spinner />
         ) : (
           <div className="mt-4 p-4 border-2 rounded border-blue-200 bg-gradient-to-b from-teal-800 to-blue-500">
-            <VideoPlayer src={videoUrl} />
+            <video
+              className="w-full rounded"
+              ref={videoRef}
+              controls
+              onTimeUpdate={handleVideoTimeUpdate}
+              onEnded={handleVideoEnded}
+              onPause={handleVideoPause}
+            />
             <div className="border rounded mt-2">
               <p className="text-center text-lg font-medium">Lessons:</p>
               <ol className="pl-8 mb-2 mt-2 list-decimal font-medium">
@@ -72,7 +159,11 @@ const CoursesPage = () => {
                       <Link
                         onClick={(e) => {
                           setVideoUrl(lesson.link);
-                          setPosterImg(lesson.previewImageLink);
+                          setProgress({
+                            courseId: params.courseId,
+                            lastLessonId: lesson.id,
+                            // currentTime: 0,
+                          });
                           e.target.style.color = "yellow";
                         }}
                         style={{
