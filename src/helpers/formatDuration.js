@@ -1,6 +1,6 @@
-export function formatDuration(duration) {
-  const hours = Math.floor(duration / 60);
-  const minutes = duration % 60;
+export function formatDuration(durationInSeconds) {
+  const hours = Math.floor(durationInSeconds / 3600);
+  const minutes = Math.floor((durationInSeconds % 3600) / 60);
 
   return `${hours}h ${minutes}min`;
 }

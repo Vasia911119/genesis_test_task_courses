@@ -43,32 +43,3 @@ export async function getCourseById(courseId) {
     throw error;
   }
 }
-
-export async function getLessonsForCourse(courseId) {
-  try {
-    const token = await getToken();
-    const headers = { Authorization: `Bearer ${token}` };
-    const response = await axios.get(
-      `${API_BASE_URL}/core/preview-courses/${courseId}/lessons`,
-      { headers }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-export async function getLessonById(id) {
-  try {
-    const token = await getToken();
-    const headers = { Authorization: `Bearer ${token}` };
-    const response = await axios.get(`${API_BASE_URL}/lessons/${id}`, {
-      headers,
-    });
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}

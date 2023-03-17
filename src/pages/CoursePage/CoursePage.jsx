@@ -5,12 +5,19 @@ import Spinner from "../../components/Spinner/Spinner";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { formatDate } from "../../helpers/formatDate";
 import { formatDuration } from "../../helpers/formatDuration";
+import Footer from "../../views/Footer/Footer";
+import Header from "../../views/Header/Header";
+import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
 
 const CoursesPage = () => {
   const params = useParams();
   const [course, setCourse] = useState([]);
   const [videoUrl, setVideoUrl] = useState("");
+  const [posterImg, setPosterImg] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+
+  console.log(course);
+  console.log(posterImg);
 
   useEffect(() => {
     async function fetchData() {
@@ -18,41 +25,38 @@ const CoursesPage = () => {
       const courseData = await getCourseById(params.courseId);
       setCourse(courseData);
       setVideoUrl(courseData.meta.courseVideoPreview.link);
+      setPosterImg(courseData.previewImageLink + "/cover.webp");
       setIsLoading(false);
     }
     fetchData();
   }, [params.courseId]);
-  console.log(course);
-  console.log(videoUrl);
 
   return (
     <div className="container flex flex-col min-h-screen">
-      <header className="w-full rounded bg-gradient-to-b from-teal-900 to-blue-900">
-        <h1 className="text-center p-4 font-bold uppercase text-md md:text-2xl text-blue-200">
-          {course.title}
-        </h1>
-      </header>
+      <Header title={course.title} />
       <main>
         {isLoading ? (
           <Spinner />
         ) : (
-          <div className="mt-4 p-4 border-2 md:max-w-[376px] rounded border-blue-200 bg-gradient-to-b from-teal-800 to-blue-500">
-            <video
-              className="mb-4 rounded"
-              width="750"
-              heigth="500"
-              controls={true}
-              preload="auto"
-            >
-              <source src={videoUrl} type="application/x-mpegURL" />
-              Sorry, your brovser doesn't support videos.
-            </video>
-            <div className="border rounded">
+          <div className="mt-4 p-4 border-2 rounded border-blue-200 bg-gradient-to-b from-teal-800 to-blue-500">
+            <VideoPlayer src={videoUrl} />
+            <div className="border rounded mt-2">
               <p className="text-center text-lg font-medium">Lessons:</p>
               <ol className="pl-8 mb-2 mt-2 list-decimal font-medium">
                 {course?.lessons?.map((lesson, index) => (
                   <li key={index}>
-                    {lesson.status === "locked" ? (
+                    {lesson.link === undefined ? (
+                      <Link
+                        onClick={(e) => e.preventDefault()}
+                        style={{
+                          color: "gray",
+                          textDecoration: "none",
+                          cursor: "default",
+                        }}
+                      >
+                        {lesson.title}
+                      </Link>
+                    ) : lesson.status === "locked" ? (
                       <Link
                         onClick={(e) => e.preventDefault()}
                         style={{
@@ -65,7 +69,18 @@ const CoursesPage = () => {
                         {"\u0020\u{1F512}"}
                       </Link>
                     ) : (
-                      <Link>{lesson.title}</Link>
+                      <Link
+                        onClick={(e) => {
+                          setVideoUrl(lesson.link);
+                          setPosterImg(lesson.previewImageLink);
+                          e.target.style.color = "yellow";
+                        }}
+                        style={{
+                          color: videoUrl === lesson.link ? "yellow" : "black",
+                        }}
+                      >
+                        {lesson.title}
+                      </Link>
                     )}
                   </li>
                 ))}
@@ -80,7 +95,7 @@ const CoursesPage = () => {
                 </li>
               ))}
             </ul>
-            <div className="flex my-2 justify-center gap-4">
+            <div className="flex flex-col my-2 text-center md:flex-row justify-center md:gap-4">
               <p>
                 <span className="font-bold mr-2">Status:</span>
                 {course.status}
@@ -96,12 +111,6 @@ const CoursesPage = () => {
               </p>
               <p className="font-bold">Rating: {course.rating}</p>
             </div>
-
-            {/* <img
-            width={750}
-            src={course.previewImageLink + "/cover.webp"}
-            alt={course.title}
-          /> */}
           </div>
         )}
         <Link
@@ -112,11 +121,7 @@ const CoursesPage = () => {
           Back to courses
         </Link>
       </main>
-      <footer className="mt-auto w-full rounded bg-gradient-to-b from-teal-900 to-blue-900 flex justify-center text-blue-200 p-4">
-        <span className="pr-1">&copy;</span>
-        <span>{new Date().getFullYear()}</span>
-        <p className="pl-1">COURSES</p>
-      </footer>
+      <Footer />
     </div>
   );
 };

@@ -4,7 +4,8 @@ import { getCourses } from "../../services/api";
 import Pagination from "../../components/Pagination/Pagination";
 import Spinner from "../../components/Spinner/Spinner";
 import LinkToTop from "../../components/LinkToTop/LinkToTop";
-// import styles from "./Courses.module.css";
+import Footer from "../../views/Footer/Footer";
+import Header from "../../views/Header/Header";
 
 const CoursesPage = () => {
   const { pathname } = useLocation();
@@ -37,11 +38,7 @@ const CoursesPage = () => {
 
   return (
     <div className="container flex flex-col min-h-screen">
-      <header className="w-full rounded bg-gradient-to-b from-teal-900 to-blue-900">
-        <h1 className="text-center p-4 font-bold uppercase text-xl md:text-2xl text-blue-200">
-          Collection of training courses
-        </h1>
-      </header>
+      <Header title="Collection of training courses" />
       <main>
         {isLoading ? (
           <Spinner />
@@ -103,11 +100,7 @@ const CoursesPage = () => {
         </div>
         <LinkToTop />
       </main>
-      <footer className="mt-auto w-full rounded bg-gradient-to-b from-teal-900 to-blue-900 flex justify-center text-blue-200 p-4">
-        <span className="pr-1">&copy;</span>
-        <span>{new Date().getFullYear()}</span>
-        <p className="pl-1">COURSES</p>
-      </footer>
+      <Footer />
     </div>
   );
 };
