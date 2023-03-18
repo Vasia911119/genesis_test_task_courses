@@ -7,6 +7,7 @@ import { formatDate } from "../../helpers/formatDate";
 import { formatDuration } from "../../helpers/formatDuration";
 import Footer from "../../views/Footer/Footer";
 import Header from "../../views/Header/Header";
+import Container from "../../components/Container/Container";
 import Hls from "hls.js";
 
 const CoursesPage = () => {
@@ -112,7 +113,7 @@ const CoursesPage = () => {
   };
 
   return (
-    <div className="container flex flex-col min-h-screen">
+    <Container>
       <Header title={course.title} />
       <main>
         {isLoading ? (
@@ -162,7 +163,6 @@ const CoursesPage = () => {
                           setProgress({
                             courseId: params.courseId,
                             lastLessonId: lesson.id,
-                            // currentTime: 0,
                           });
                           e.target.style.color = "yellow";
                         }}
@@ -213,7 +213,7 @@ const CoursesPage = () => {
         </Link>
       </main>
       <Footer />
-    </div>
+    </Container>
   );
 };
 

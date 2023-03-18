@@ -1,13 +1,20 @@
+import { scrollTop } from "../../helpers/scrollTop";
+
 const Pagination = ({
   coursesPerPage,
   totalCourses,
-  paginate,
   currentPage,
+  setCurrentPage,
 }) => {
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(totalCourses / coursesPerPage); i++) {
     pageNumbers.push(i);
   }
+
+  const paginate = (pageNumber) => {
+    scrollTop();
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <nav>

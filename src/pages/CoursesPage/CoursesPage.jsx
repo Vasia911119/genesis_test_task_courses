@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getCourses } from "../../services/api";
 import Pagination from "../../components/Pagination/Pagination";
@@ -6,15 +6,13 @@ import Spinner from "../../components/Spinner/Spinner";
 import LinkToTop from "../../components/LinkToTop/LinkToTop";
 import Footer from "../../views/Footer/Footer";
 import Header from "../../views/Header/Header";
+import Container from "../../components/Container/Container";
 
 const CoursesPage = () => {
   const { pathname } = useLocation();
   const [courses, setCourses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  const Scroll = require("react-scroll");
-  const scroll = Scroll.animateScroll;
-  const scrollTop = () => scroll.scrollToTop({ smooth: true, hashSpy: true });
   const coursesPerPage = 10;
 
   useEffect(() => {
@@ -31,13 +29,8 @@ const CoursesPage = () => {
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
   const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
 
-  const paginate = (pageNumber) => {
-    scrollTop();
-    setCurrentPage(pageNumber);
-  };
-
   return (
-    <div className="container flex flex-col min-h-screen">
+    <Container>
       <Header title="Collection of training courses" />
       <main>
         {isLoading ? (
@@ -93,7 +86,7 @@ const CoursesPage = () => {
             <Pagination
               coursesPerPage={coursesPerPage}
               totalCourses={courses.length}
-              paginate={paginate}
+              setCurrentPage={setCurrentPage}
               currentPage={currentPage}
             />
           )}
@@ -101,7 +94,7 @@ const CoursesPage = () => {
         <LinkToTop />
       </main>
       <Footer />
-    </div>
+    </Container>
   );
 };
 
