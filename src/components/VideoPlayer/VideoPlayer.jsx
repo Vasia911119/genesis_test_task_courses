@@ -141,7 +141,7 @@ const VideoPlayer = ({
           <div className="flex justify-end">
             <p className=" text-yellow-300">Current video speed:</p>
             <p className="ml-2 rounded-full bg-yellow-300 text-blue-500 px-2 font-bold ">
-              {playbackRate}
+              {playbackRate}x
             </p>
           </div>
           <p className="text-slate-400">
