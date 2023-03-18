@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getCourseById } from "../../services/api";
 import Spinner from "../../components/Spinner/Spinner";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { LockClosedIcon } from "@heroicons/react/24/solid";
 import { formatDate } from "../../helpers/formatDate";
 import { formatDuration } from "../../helpers/formatDuration";
 import Footer from "../../views/Footer/Footer";
 import Header from "../../views/Header/Header";
 import Container from "../../components/Container/Container";
-import Hls from "hls.js";
+import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
 
 const CoursesPage = () => {
   const params = useParams();
@@ -20,14 +21,15 @@ const CoursesPage = () => {
     lastLessonId: null,
     currentTime: 0,
   });
-  const videoRef = useRef(null);
+
+  console.log(course);
 
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
-      const courseData = await getCourseById(params.courseId);
+      const courseData = await getCourseById(params?.courseId);
       setCourse(courseData);
-      setVideoUrl(courseData.meta.courseVideoPreview.link);
+      setVideoUrl(courseData?.meta?.courseVideoPreview?.link);
       setIsLoading(false);
     }
     fetchData();
@@ -58,60 +60,6 @@ const CoursesPage = () => {
     }
   }, [progress]);
 
-  useEffect(() => {
-    if (videoUrl) {
-      if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(videoUrl);
-        hls.attachMedia(videoRef.current);
-        // hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        //   videoRef.current.play();
-        // });
-      } else if (
-        videoRef.current.canPlayType("application/vnd.apple.mpegurl")
-      ) {
-        videoRef.current.src = videoUrl;
-        // videoRef.current.addEventListener("loadedmetadata", () => {
-        //   videoRef.current.play();
-        // });
-      }
-      if (
-        videoRef.current &&
-        progress.currentTime &&
-        !isNaN(progress.currentTime)
-      ) {
-        videoRef.current.currentTime = progress.currentTime;
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoUrl]);
-
-  const handleVideoTimeUpdate = () => {
-    if (videoRef.current) {
-      setProgress({
-        ...progress,
-        currentTime: Math.floor(videoRef.current.currentTime),
-      });
-    }
-  };
-
-  const handleVideoEnded = () => {
-    setProgress({
-      courseId: params.courseId,
-      lastLessonId: null,
-      currentTime: 0,
-    });
-  };
-
-  const handleVideoPause = () => {
-    if (videoRef.current) {
-      setProgress({
-        ...progress,
-        currentTime: Math.floor(videoRef.current.currentTime),
-      });
-    }
-  };
-
   return (
     <Container>
       <Header title={course.title} />
@@ -120,14 +68,22 @@ const CoursesPage = () => {
           <Spinner />
         ) : (
           <div className="mt-4 p-4 border-2 rounded border-blue-200 bg-gradient-to-b from-teal-800 to-blue-500">
-            <video
-              className="w-full rounded"
-              ref={videoRef}
-              controls
-              onTimeUpdate={handleVideoTimeUpdate}
-              onEnded={handleVideoEnded}
-              onPause={handleVideoPause}
-            />
+            {videoUrl ? (
+              <VideoPlayer
+                videoUrl={videoUrl}
+                controls
+                progress={progress}
+                params={params}
+                setProgress={setProgress}
+                viewSpeedbar
+              />
+            ) : (
+              <img
+                className="w-full rounded mx-auto mb-4"
+                src={course.previewImageLink + "/cover.webp"}
+                alt={course.title}
+              />
+            )}
             <div className="border rounded mt-2">
               <p className="text-center text-lg font-medium">Lessons:</p>
               <ol className="pl-8 mb-2 mt-2 list-decimal font-medium">
@@ -153,8 +109,10 @@ const CoursesPage = () => {
                           cursor: "default",
                         }}
                       >
-                        {lesson.title}
-                        {"\u0020\u{1F512}"}
+                        <div className="flex">
+                          <p>{lesson.title}</p>
+                          <LockClosedIcon className="ml-2 h-5 w-5 text-yellow-500" />
+                        </div>
                       </Link>
                     ) : (
                       <Link
@@ -168,6 +126,13 @@ const CoursesPage = () => {
                         }}
                         style={{
                           color: videoUrl === lesson.link ? "yellow" : "black",
+                          textDecoration: "none",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.textDecoration = "underline";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.textDecoration = "none";
                         }}
                       >
                         {lesson.title}

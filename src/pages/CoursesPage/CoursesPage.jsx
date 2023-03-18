@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getCourses } from "../../services/api";
 import Pagination from "../../components/Pagination/Pagination";
@@ -7,12 +7,14 @@ import LinkToTop from "../../components/LinkToTop/LinkToTop";
 import Footer from "../../views/Footer/Footer";
 import Header from "../../views/Header/Header";
 import Container from "../../components/Container/Container";
+import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
 
 const CoursesPage = () => {
   const { pathname } = useLocation();
   const [courses, setCourses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [hoveredVideo, setHoveredVideo] = useState(null);
   const coursesPerPage = 10;
 
   useEffect(() => {
@@ -29,6 +31,8 @@ const CoursesPage = () => {
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
   const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
 
+  console.log(courses);
+
   return (
     <Container>
       <Header title="Collection of training courses" />
@@ -41,6 +45,8 @@ const CoursesPage = () => {
               <li
                 className="p-4 border-2 md:max-w-[376px] rounded border-blue-200 bg-gradient-to-b from-teal-500 to-blue-500"
                 key={course.id}
+                onMouseEnter={() => setHoveredVideo(course.id)}
+                onMouseLeave={() => setHoveredVideo(null)}
               >
                 <Link to={`${pathname}/${course.id}`}>
                   <h2 className="text-center mb-4 text-xl font-bold">
@@ -75,6 +81,11 @@ const CoursesPage = () => {
                         <p className="font-medium">Rating: {course.rating}</p>
                       </div>
                     </div>
+                    <VideoPlayer
+                      videoUrl={course?.meta?.courseVideoPreview?.link}
+                      muted
+                      hover={hoveredVideo === course.id}
+                    />
                   </div>
                 </Link>
               </li>
