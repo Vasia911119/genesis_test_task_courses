@@ -1,17 +1,19 @@
 import React, { useRef, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Hls from "hls.js";
 import axios from "axios";
+import styles from "./VideoPlayer.module.css";
 
 const VideoPlayer = ({
   videoUrl,
   progress,
-  params,
   setProgress,
   muted,
   controls,
   hover,
   viewSpeedbar,
 }) => {
+  const params = useParams();
   const videoRef = useRef(null);
   const [available, setAvailable] = useState(true);
   const [playbackRate, setPlaybackRate] = useState(1);
@@ -81,7 +83,6 @@ const VideoPlayer = ({
     if (videoRef.current) {
       setPlaybackRate(videoRef.current.playbackRate);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoRef.current ? videoRef.current.playbackRate : null]);
 
   useEffect(() => {
@@ -122,13 +123,9 @@ const VideoPlayer = ({
 
   return (
     <>
-      {!available && (
-        <p className="text-center font-bold text-red-600">
-          Video not available
-        </p>
-      )}
+      {!available && <p className={styles.alert}>Video not available</p>}
       <video
-        className="w-full rounded"
+        className={styles.video}
         ref={videoRef}
         controls={controls}
         muted={muted}
@@ -137,17 +134,15 @@ const VideoPlayer = ({
         onPause={handleVideoPause}
       />
       {viewSpeedbar && (
-        <div className="mt-2 xl:flex xl:flex-row-reverse xl:justify-around">
-          <div className="flex justify-end">
-            <p className=" text-yellow-300">Current video speed:</p>
-            <p className="ml-2 rounded-full bg-yellow-300 text-blue-500 px-2 font-bold ">
-              {playbackRate}x
-            </p>
+        <div className={styles.mainWrapper}>
+          <div className={styles.wrapper}>
+            <p className={styles.speedDesc}>Current video speed:</p>
+            <p className={styles.speedValue}>{playbackRate}x</p>
           </div>
-          <p className="text-slate-400">
+          <p className={styles.desc}>
             You can change the video viewing speed. To increase speed press
-            <span className="ml-1 text-yellow-300">Alt+1</span>, to decrease
-            <span className="ml-1 text-yellow-300">Alt+2</span>
+            <span className={styles.accent}>Alt+1</span>, to decrease
+            <span className={styles.accent}>Alt+2</span>
           </p>
         </div>
       )}

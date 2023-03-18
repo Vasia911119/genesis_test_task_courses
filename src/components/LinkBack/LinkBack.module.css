@@ -1,0 +1,7 @@
+.link {
+  @apply my-4 relative block w-[162px] bg-blue-500 transition-colors hover:bg-blue-700 text-white font-medium py-2 pr-4 pl-8 rounded;
+}
+
+.icon {
+    @apply absolute top-1/2 left-2 h-5 w-5 translate-y-[-50%];
+}

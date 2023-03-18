@@ -1,0 +1,19 @@
+.mainWrapper {
+  @apply border rounded mt-2;
+}
+
+.text {
+  @apply text-center text-lg font-medium;
+}
+
+.list {
+  @apply pl-8 mb-2 mt-2 list-decimal font-medium;
+}
+
+.wrapper {
+  @apply flex;
+}
+
+.icon {
+  @apply ml-2 h-5 w-5 text-yellow-500;
+}

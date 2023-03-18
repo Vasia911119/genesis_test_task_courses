@@ -1,0 +1,7 @@
+.text {
+  @apply text-center font-medium;
+}
+
+.item {
+  @apply text-center;
+}

@@ -1,0 +1,31 @@
+.alert {
+  @apply text-center font-bold text-red-600;
+}
+
+.video {
+  @apply w-full rounded;
+}
+
+.mainWrapper {
+  @apply mt-2 xl:flex xl:flex-row-reverse xl:justify-around;
+}
+
+.wrapper {
+  @apply flex justify-end;
+}
+
+.speedDesc {
+  @apply text-yellow-300;
+}
+
+.speedValue {
+  @apply ml-2 rounded-full bg-yellow-300 text-blue-500 px-2 font-bold;
+}
+
+.desc {
+  @apply text-slate-400;
+}
+
+.accent {
+  @apply ml-1 text-yellow-300;
+}

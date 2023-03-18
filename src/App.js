@@ -9,8 +9,8 @@ import "./App.css";
 
 import Spinner from "./components/Spinner/Spinner";
 
-const CoursesPage = lazy(() => import("./pages/CoursesPage/CoursesPage"));
-const CoursePage = lazy(() => import("./pages/CoursePage/CoursePage"));
+const CoursesPage = lazy(() => import("./pages/CoursesPage"));
+const CoursePage = lazy(() => import("./pages/CoursePage"));
 
 function App() {
   return (

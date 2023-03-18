@@ -1,4 +1,5 @@
 import { scrollTop } from "../../helpers/scrollTop";
+import styles from "./Pagination.module.css";
 
 const Pagination = ({
   coursesPerPage,
@@ -17,15 +18,13 @@ const Pagination = ({
   };
 
   return (
-    <nav>
-      <ul className="flex gap-4 justify-center">
+    <nav className={styles.nav}>
+      <ul className={styles.list}>
         {pageNumbers.map((number) => (
           <li key={number}>
             <button
               className={
-                currentPage === number
-                  ? "bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  : "bg-blue-500 transition-colors hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                currentPage === number ? styles.active : styles.notActive
               }
               onClick={() => paginate(number)}
             >

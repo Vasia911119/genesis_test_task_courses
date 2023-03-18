@@ -1,0 +1,15 @@
+.nav {
+  @apply mb-8;
+}
+
+.list {
+  @apply flex gap-4 justify-center;
+}
+
+.active {
+  @apply bg-blue-700 text-white font-bold py-2 px-4 rounded;
+}
+
+.notActive {
+  @apply bg-blue-500 transition-colors hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+}
