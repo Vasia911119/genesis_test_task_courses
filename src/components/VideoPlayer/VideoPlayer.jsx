@@ -12,11 +12,13 @@ const VideoPlayer = ({
   controls,
   hover,
   viewSpeedbar,
+  pictureInPicture,
 }) => {
   const params = useParams();
   const videoRef = useRef(null);
   const [available, setAvailable] = useState(true);
   const [playbackRate, setPlaybackRate] = useState(1);
+  const [isPictureInPicture, setIsPictureInPicture] = useState(false);
 
   useEffect(() => {
     if (!videoUrl) {
@@ -39,16 +41,10 @@ const VideoPlayer = ({
         const hls = new Hls();
         hls.loadSource(videoUrl);
         hls.attachMedia(videoRef.current);
-        // hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        //   videoRef.current.play();
-        // });
       } else if (
         videoRef.current.canPlayType("application/vnd.apple.mpegurl")
       ) {
         videoRef.current.src = videoUrl;
-        // videoRef.current.addEventListener("loadedmetadata", () => {
-        //   videoRef.current.play();
-        // });
       }
       if (
         progress &&
@@ -83,6 +79,7 @@ const VideoPlayer = ({
     if (videoRef.current) {
       setPlaybackRate(videoRef.current.playbackRate);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoRef.current ? videoRef.current.playbackRate : null]);
 
   useEffect(() => {
@@ -95,9 +92,10 @@ const VideoPlayer = ({
 
   const handleVideoTimeUpdate = () => {
     if (setProgress && videoRef.current) {
+      const currentTime = Math.floor(videoRef.current.currentTime);
       setProgress({
         ...progress,
-        currentTime: Math.floor(videoRef.current.currentTime),
+        currentTime,
       });
     }
   };
@@ -114,10 +112,21 @@ const VideoPlayer = ({
 
   const handleVideoPause = () => {
     if (setProgress && videoRef.current) {
+      const currentTime = Math.floor(videoRef.current.currentTime);
       setProgress({
         ...progress,
-        currentTime: Math.floor(videoRef.current.currentTime),
+        currentTime,
       });
+    }
+  };
+
+  const handlePictureInPicture = () => {
+    if (document.pictureInPictureElement) {
+      document.exitPictureInPicture();
+      setIsPictureInPicture(false);
+    } else {
+      videoRef.current.requestPictureInPicture();
+      setIsPictureInPicture(true);
     }
   };
 
@@ -129,9 +138,11 @@ const VideoPlayer = ({
         ref={videoRef}
         controls={controls}
         muted={muted}
+        pictureInPicture={pictureInPicture}
         onTimeUpdate={handleVideoTimeUpdate}
         onEnded={handleVideoEnded}
         onPause={handleVideoPause}
+        onRateChange={() => setPlaybackRate(videoRef.current.playbackRate)}
       />
       {viewSpeedbar && (
         <div className={styles.mainWrapper}>
@@ -140,11 +151,28 @@ const VideoPlayer = ({
             <p className={styles.speedValue}>{playbackRate}x</p>
           </div>
           <p className={styles.desc}>
-            You can change the video viewing speed. To increase speed press
+            You can change the video viewing speed when video playing. To
+            increase speed press
             <span className={styles.accent}>Alt+1</span>, to decrease
             <span className={styles.accent}>Alt+2</span>
           </p>
         </div>
+      )}
+      {pictureInPicture && isPictureInPicture && (
+        <button
+          className={styles.pictureInPicture}
+          onClick={handlePictureInPicture}
+        >
+          Exit Picture in Picture
+        </button>
+      )}
+      {pictureInPicture && !isPictureInPicture && (
+        <button
+          className={styles.pictureInPicture}
+          onClick={handlePictureInPicture}
+        >
+          Picture in Picture
+        </button>
       )}
     </>
   );

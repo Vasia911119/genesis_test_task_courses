@@ -1,0 +1,23 @@
+.list {
+  @apply grid gap-8 justify-items-center my-8 md:grid-cols-2 xl:grid-cols-3;
+}
+
+.item {
+  @apply p-4 border-2 md:max-w-[376px] rounded border-blue-200 bg-gradient-to-b from-teal-500 to-blue-500;
+}
+
+.title {
+  @apply text-center mb-4 text-xl font-bold;
+}
+
+.img {
+  @apply w-full md:w-[330px] md:h-[160px] rounded mx-auto mb-4;
+}
+
+.wrapper {
+  @apply flex justify-center gap-4;
+}
+
+.text {
+  @apply font-medium;
+}

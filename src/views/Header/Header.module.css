@@ -1,0 +1,7 @@
+.header {
+  @apply w-full rounded bg-gradient-to-b from-teal-900 to-blue-900;
+}
+
+.title {
+    @apply text-center p-4 font-bold uppercase text-xl md:text-2xl text-blue-200;
+}

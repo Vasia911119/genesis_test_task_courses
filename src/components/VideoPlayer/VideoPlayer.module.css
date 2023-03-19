@@ -29,3 +29,7 @@
 .accent {
   @apply ml-1 text-yellow-300;
 }
+
+.pictureInPicture {
+  @apply my-4 bg-yellow-300 transition-colors hover:bg-yellow-500 text-black font-medium py-2 px-4 rounded;
+}

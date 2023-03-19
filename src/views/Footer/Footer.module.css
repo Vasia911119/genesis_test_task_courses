@@ -1,0 +1,11 @@
+.footer {
+  @apply mt-auto w-full rounded bg-gradient-to-b from-teal-900 to-blue-900 flex justify-center text-blue-200 p-4;
+}
+
+.text {
+  @apply pr-1;
+}
+
+.subText {
+    @apply pl-1;
+}

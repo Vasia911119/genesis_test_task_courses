@@ -5,9 +5,11 @@ import { formatDuration } from "../../helpers/formatDuration";
 import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
 import Lessons from "../../components/Lessons/Lessons";
 import Description from "../../components/Description/Description";
+import styles from "./Course.module.css";
 
-const Course = ({ setVideoUrl, videoUrl, course }) => {
+const Course = ({ course }) => {
   const params = useParams();
+  const [videoUrl, setVideoUrl] = useState("");
   const [progress, setProgress] = useState({
     courseId: null,
     lastLessonId: null,
@@ -40,7 +42,7 @@ const Course = ({ setVideoUrl, videoUrl, course }) => {
   }, [progress]);
 
   return (
-    <section className="mt-4 p-4 border-2 rounded border-blue-200 bg-gradient-to-b from-teal-800 to-blue-500">
+    <section className={styles.section}>
       {videoUrl ? (
         <VideoPlayer
           videoUrl={videoUrl}
@@ -48,10 +50,11 @@ const Course = ({ setVideoUrl, videoUrl, course }) => {
           progress={progress}
           setProgress={setProgress}
           viewSpeedbar
+          pictureInPicture
         />
       ) : (
         <img
-          className="w-full rounded mx-auto mb-4"
+          className={styles.img}
           src={course.previewImageLink + "/cover.webp"}
           alt={course.title}
         />
@@ -63,19 +66,17 @@ const Course = ({ setVideoUrl, videoUrl, course }) => {
         videoUrl={videoUrl}
       />
       <Description course={course} />
-      <div className="flex flex-col my-2 text-center md:flex-row justify-center md:gap-4">
-        <p>
-          <span className="font-bold mr-2">Status:</span>
-          {course.status}
-        </p>
-        <p>
-          <span className="font-bold mr-2">Launch data:</span>
-          {formatDate(course.launchDate)}
+      <div className={styles.wrapper}>
+        <p className={styles.text}>Status: {course.status}</p>
+        <p className={styles.text}>
+          Launch data: {formatDate(course.launchDate)}
         </p>
       </div>
-      <div className="flex my-2 justify-center gap-4">
-        <p className="font-bold">Duration: {formatDuration(course.duration)}</p>
-        <p className="font-bold">Rating: {course.rating}</p>
+      <div className={styles.cover}>
+        <p className={styles.text}>
+          Duration: {formatDuration(course.duration)}
+        </p>
+        <p className={styles.text}>Rating: {course.rating}</p>
       </div>
     </section>
   );
