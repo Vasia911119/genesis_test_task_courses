@@ -1,8 +1,9 @@
+import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
 import styles from "./Lessons.module.css";
 
-const Lessons = ({ course, setVideoUrl, setProgress, videoUrl }) => {
+export const Lessons = ({ course, setVideoUrl, setProgress, videoUrl }) => {
   const params = useParams();
   return (
     <div className={styles.mainWrapper}>
@@ -65,5 +66,3 @@ const Lessons = ({ course, setVideoUrl, setProgress, videoUrl }) => {
     </div>
   );
 };
-
-export default Lessons;

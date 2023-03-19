@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Description from "../../components/Description/Description";
-import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
-import Pagination from "../../components/Pagination/Pagination";
+import { Description, Pagination, VideoPlayer } from "../../components";
 import styles from "./Courses.module.css";
 
-const Courses = ({ courses }) => {
+export const Courses = ({ courses }) => {
   const { pathname } = useLocation();
   const [hoveredVideo, setHoveredVideo] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -63,5 +61,3 @@ const Courses = ({ courses }) => {
     </section>
   );
 };
-
-export default Courses;

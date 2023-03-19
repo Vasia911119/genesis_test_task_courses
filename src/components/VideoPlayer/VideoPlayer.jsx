@@ -4,7 +4,7 @@ import Hls from "hls.js";
 import axios from "axios";
 import styles from "./VideoPlayer.module.css";
 
-const VideoPlayer = ({
+export const VideoPlayer = ({
   videoUrl,
   progress,
   setProgress,
@@ -55,12 +55,12 @@ const VideoPlayer = ({
         videoRef.current.currentTime = progress.currentTime;
       }
       const handleKeyDown = (event) => {
-        if (event.altKey && event.key === "1") {
+        if (event.ctrlKey && event.altKey && event.key === "1") {
           videoRef.current.playbackRate = Math.min(
             videoRef.current.playbackRate + 0.25,
             3
           );
-        } else if (event.altKey && event.key === "2") {
+        } else if (event.ctrlKey && event.altKey && event.key === "2") {
           videoRef.current.playbackRate = Math.max(
             videoRef.current.playbackRate - 0.25,
             0.25
@@ -130,6 +130,22 @@ const VideoPlayer = ({
     }
   };
 
+  useEffect(() => {
+    const handleLeavePictureInPicture = () => {
+      setIsPictureInPicture(false);
+    };
+    document.addEventListener(
+      "leavepictureinpicture",
+      handleLeavePictureInPicture
+    );
+    return () => {
+      document.removeEventListener(
+        "leavepictureinpicture",
+        handleLeavePictureInPicture
+      );
+    };
+  }, []);
+
   return (
     <>
       {!available && <p className={styles.alert}>Video not available</p>}
@@ -151,31 +167,22 @@ const VideoPlayer = ({
             <p className={styles.speedValue}>{playbackRate}x</p>
           </div>
           <p className={styles.desc}>
-            You can change the video viewing speed when video playing. To
-            increase speed press
-            <span className={styles.accent}>Alt+1</span>, to decrease
-            <span className={styles.accent}>Alt+2</span>
+            You can change the video viewing speed. To increase speed press
+            <span className={styles.accent}>Ctrl+Alt+1</span>, to decrease
+            <span className={styles.accent}>Ctrl+Alt+2</span>
           </p>
         </div>
       )}
-      {pictureInPicture && isPictureInPicture && (
+      {pictureInPicture && (
         <button
           className={styles.pictureInPicture}
           onClick={handlePictureInPicture}
         >
-          Exit Picture in Picture
-        </button>
-      )}
-      {pictureInPicture && !isPictureInPicture && (
-        <button
-          className={styles.pictureInPicture}
-          onClick={handlePictureInPicture}
-        >
-          Picture in Picture
+          {isPictureInPicture
+            ? "Exit Picture in Picture"
+            : "Picture in Picture"}
         </button>
       )}
     </>
   );
 };
-
-export default VideoPlayer;

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { ArrowLongUpIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-scroll";
 import styles from "./LinkToTop.module.css";
-import { scrollTop } from "../../helpers/scrollTop";
+import { scrollTop } from "../../helpers";
 
-const LinkToTop = () => {
+export const LinkToTop = () => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -33,5 +33,3 @@ const LinkToTop = () => {
     </>
   );
 };
-
-export default LinkToTop;

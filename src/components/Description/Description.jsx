@@ -1,7 +1,8 @@
-import Skills from "../Skills/Skills";
+import React from "react";
+import { Skills } from "..";
 import styles from "./Description.module.css";
 
-const Description = ({ course }) => {
+export const Description = ({ course }) => {
   return (
     <>
       <p className={styles.desc}>{course.description}</p>
@@ -9,5 +10,3 @@ const Description = ({ course }) => {
     </>
   );
 };
-
-export default Description;

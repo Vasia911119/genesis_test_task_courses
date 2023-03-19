@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import "./App.css";
 
-import Spinner from "./components/Spinner/Spinner";
+import { Spinner } from "./components";
 
 const CoursesPage = lazy(() => import("./pages/CoursesPage"));
 const CoursePage = lazy(() => import("./pages/CoursePage"));

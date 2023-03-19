@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Spinner from "../components/Spinner/Spinner";
-import Footer from "../views/Footer/Footer";
-import Header from "../views/Header/Header";
-import Container from "../components/Container/Container";
-import LinkBack from "../components/LinkBack/LinkBack";
-import Course from "../views/Course/Course";
+import { Container, LinkBack, Spinner } from "../components";
+import { Header, Course, Footer } from "../views";
 import { getCourseById } from "../services/api";
 import { useParams } from "react-router-dom";
 

@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getCourses } from "../services/api";
-import Spinner from "../components/Spinner/Spinner";
-import LinkToTop from "../components/LinkToTop/LinkToTop";
-import Footer from "../views/Footer/Footer";
-import Header from "../views/Header/Header";
-import Container from "../components/Container/Container";
-import Courses from "../views/Courses/Courses";
+import { Container, LinkToTop, Spinner } from "../components";
+import { Header, Courses, Footer } from "../views";
 
 const CoursesPage = () => {
   const [courses, setCourses] = useState([]);

@@ -1,6 +1,7 @@
+import React from "react";
 import styles from "./Skills.module.css";
 
-const Skills = ({ course }) => {
+export const Skills = ({ course }) => {
   return (
     <>
       <p className={styles.text}>Skills:</p>
@@ -14,5 +15,3 @@ const Skills = ({ course }) => {
     </>
   );
 };
-
-export default Skills;

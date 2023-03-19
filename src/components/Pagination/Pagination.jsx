@@ -1,7 +1,8 @@
-import { scrollTop } from "../../helpers/scrollTop";
+import React from "react";
+import { scrollTop } from "../../helpers";
 import styles from "./Pagination.module.css";
 
-const Pagination = ({
+export const Pagination = ({
   coursesPerPage,
   totalCourses,
   currentPage,
@@ -36,5 +37,3 @@ const Pagination = ({
     </nav>
   );
 };
-
-export default Pagination;

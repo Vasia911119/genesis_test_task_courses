@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { formatDate } from "../../helpers/formatDate";
-import { formatDuration } from "../../helpers/formatDuration";
-import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
-import Lessons from "../../components/Lessons/Lessons";
-import Description from "../../components/Description/Description";
+import { formatDate, formatDuration } from "../../helpers";
+import { Description, Lessons, VideoPlayer } from "../../components";
 import styles from "./Course.module.css";
 
-const Course = ({ course }) => {
+export const Course = ({ course }) => {
   const params = useParams();
   const [videoUrl, setVideoUrl] = useState("");
   const [progress, setProgress] = useState({
@@ -81,5 +78,3 @@ const Course = ({ course }) => {
     </section>
   );
 };
-
-export default Course;
