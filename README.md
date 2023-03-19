@@ -1,1 +1,3 @@
-# genesis_test_task_courses
+# Практично всі завдання +- виконав, нижче посилання на відео з результатом роботи, там правда на цьому відео не видно режим картинка в картинці, запис з екрану не захопив, але він працює.
+
+https://drive.google.com/file/d/11XtvZ2plgmNFKRCa58gnFIcDmC5ug2x-/view?usp=share_link
